@@ -5,36 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luxcrew Travels | Summer Bash Ticket Portal</title>
     
-    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
-    <!-- Link to Custom CSS -->
     <link rel="stylesheet" href="TicketApp.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <!-- Navbar -->
     <nav class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-md mx-auto flex justify-around p-4">
-            <button onclick="showSection('buy')" id="nav-buy" class="nav-btn active">Get Tickets</button>
-            <button onclick="showSection('verify')" id="nav-verify" class="nav-btn">Verify Entry</button>
+        <div class="max-w-md mx-auto flex justify-center p-4">
+            <span class="font-black text-blue-600 text-lg italic">LUXCREW TRAVELS</span>
         </div>
     </nav>
 
     <main class="max-w-md mx-auto p-4 pb-20">
-
-        <!-- SECTION: BUY TICKET -->
         <div id="section-buy">
-            <!-- Event Card -->
             <div class="bg-white rounded-3xl shadow-lg overflow-hidden mb-6 border border-gray-100">
                 <div class="relative h-56 bg-blue-200">
-                    <img src="./Flyerr.png" onerror="this.src='https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=600'" class="w-full h-full object-cover">
-                    <div class="flyer-overlay">
-                        <p class="brand-sub">Luxcrew Travels Presents</p>
-                        <h1 class="brand-main">SUMMER BASH</h1>
-                        <p class="brand-tag">Pool Side Refresh & Fun</p>
+                    <img src="./Flyerr.png" alt="Event Flyer" onerror="this.src='https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=600'" class="w-full h-full object-cover">
+                    <div class="flyer-overlay absolute inset-0 bg-black/30 flex flex-col justify-end p-4 text-white">
+                        <p class="brand-sub text-xs font-bold uppercase">Luxcrew Travels Presents</p>
+                        <h1 class="brand-main text-3xl font-black italic">SUMMER BASH</h1>
+                        <p class="brand-tag text-sm italic">Pool Side Refresh & Fun</p>
                     </div>
                 </div>
                 <div class="p-5 flex justify-between items-center">
@@ -42,24 +35,23 @@
                         <p class="text-sm font-bold text-gray-800 italic">📅 Saturday, 25 April</p>
                         <p class="text-sm text-gray-600">⏰ 1:00 PM - 07:00 PM</p>
                     </div>
-                    <span class="price-tag">1000 INR</span>
+                    <span class="price-tag bg-blue-600 text-white px-3 py-1 rounded-full font-bold">1000 INR</span>
                 </div>
             </div>
 
-            <!-- Booking Form -->
             <div class="bg-white rounded-3xl p-6 shadow-lg">
                 <h2 class="text-xl font-black mb-4 text-gray-800">Registration</h2>
                 <form id="bookingForm" class="space-y-4">
-                    <input type="text" id="custName" required placeholder="Full Name" class="form-input">
-                    <input type="tel" id="custPhone" required pattern="[0-9]{10}" placeholder="Phone (10 digits)" class="form-input">
-                    <input type="email" id="custEmail" required placeholder="Email Address" class="form-input">
-                    <button type="button" onclick="handlePaymentTransition()" class="btn-primary">
+                    <input type="text" id="custName" required placeholder="Full Name" class="form-input w-full p-3 border rounded-xl">
+                    <input type="tel" id="custPhone" required pattern="[0-9]{10}" placeholder="Phone (10 digits)" class="form-input w-full p-3 border rounded-xl">
+                    <input type="email" id="custEmail" required placeholder="Email Address" class="form-input w-full p-3 border rounded-xl">
+                    
+                    <button type="submit" id="submitBtn" class="btn-primary w-full bg-blue-600 text-white py-4 rounded-xl font-black shadow-lg">
                         PROCEED TO PAYMENT
                     </button>
                 </form>
 
-                <!-- Secure Payment Box -->
-                <div id="payInstructions" class="hidden mt-4 space-y-4 animate-slide-up">
+                <div id="payInstructions" class="hidden mt-6 space-y-4 animate-slide-up">
                     <div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl">
                         <p class="text-[10px] font-bold text-blue-600 uppercase mb-2">Option 1: Quick Pay</p>
                         <button onclick="openUPI()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm shadow-md transition active:scale-95">
@@ -76,67 +68,43 @@
                         <p class="text-[9px] text-gray-400 italic">Pay ₹1000 then return here to claim ticket.</p>
                     </div>
 
-                    <button onclick="processFinalTicket()" class="w-full bg-gray-900 text-white py-4 rounded-xl font-black shadow-xl">
-                        I HAVE PAID - GET TICKET
-                    </button>
-                    <!-- WhatsApp Confirmation Section -->
-    <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-2xl text-center">
-    
-    <p class="text-[10px] font-bold text-green-600 uppercase mb-2">
-        Final Step: Confirm Payment
-    </p>
-
-    <p class="text-xs text-gray-600 mb-3">
-        After completing payment, send confirmation via WhatsApp to receive your ticket approval.
-    </p>
-
-    <a id="whatsappLink"
-       target="_blank"
-       class="block w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold shadow-md transition active:scale-95">
-       
-       📲 Send Payment Confirmation on WhatsApp
-    </a>
-
-</div>
+                    <div class="mt-4 p-4 bg-green-50 border border-green-200 rounded-2xl text-center">
+                        <p class="text-[10px] font-bold text-green-600 uppercase mb-2">Final Step: Confirm Payment</p>
+                        <p class="text-xs text-gray-600 mb-3">After paying, send confirmation via WhatsApp for approval.</p>
+                        <a id="whatsappLink" href="#" target="_blank" class="block w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold shadow-md transition active:scale-95 mb-3">
+                            📲 Send WhatsApp Confirmation
+                        </a>
+                        <button id="getTicketBtn" onclick="processFinalTicket()" class="w-full bg-gray-900 text-white py-4 rounded-xl font-black shadow-xl">
+                            I HAVE PAID - GET TICKET
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION: DISPLAY TICKET -->
         <div id="section-ticket" class="hidden">
-            <div id="ticket-capture" class="ticket-visual overflow-hidden">
-                <div class="pool-gradient p-6 text-white">
+            <div id="ticket-capture" class="ticket-visual overflow-hidden bg-white rounded-3xl shadow-2xl relative">
+                <div class="pool-gradient p-6 text-white bg-gradient-to-r from-blue-500 to-cyan-400">
                     <h2 class="text-2xl font-black italic tracking-tighter">SUMMER BASH</h2>
                     <p class="text-[10px] font-bold opacity-80 uppercase tracking-widest">Luxcrew Travels Event Pass</p>
                 </div>
                 <div class="p-6 pb-20 space-y-6">
                     <div class="grid grid-cols-2">
-                        <div><p class="label">ATTENDEE</p><p id="dispName" class="font-bold text-gray-800"></p></div>
-                        <div class="text-right"><p class="label">TICKET ID</p><p id="dispId" class="ticket-id-text"></p></div>
+                        <div><p class="label text-[10px] text-gray-400 uppercase font-bold">ATTENDEE</p><p id="dispName" class="font-bold text-gray-800"></p></div>
+                        <div class="text-right"><p class="label text-[10px] text-gray-400 uppercase font-bold">TICKET ID</p><p id="dispId" class="ticket-id-text font-mono font-bold text-blue-600"></p></div>
                     </div>
-                    <div class="dashed-line"></div>
+                    <div class="dashed-line border-t-2 border-dashed border-gray-200 my-4"></div>
                     <div class="pt-8 flex flex-col items-center">
                         <div id="qrcode" class="p-2 bg-white border border-gray-100 rounded-xl shadow-sm"></div>
-                        <p class="qr-caption">Scan for entry validation</p>
+                        <p class="qr-caption mt-2 text-[10px] text-gray-400 font-bold">Scan for entry validation</p>
                     </div>
                 </div>
             </div>
-            <button onclick="downloadTicket()" class="btn-dark mt-6">📥 Download PDF Ticket</button>
+            <button onclick="downloadTicket()" class="w-full bg-black text-white py-4 rounded-xl font-bold mt-6">📥 Download PDF Ticket</button>
             <button onclick="location.reload()" class="w-full mt-3 text-gray-400 text-sm font-bold">Book Another Ticket</button>
-        </div>
-
-        <!-- SECTION: VERIFY -->
-        <div id="section-verify" class="hidden">
-            <div class="bg-white rounded-3xl p-6 shadow-lg">
-                <h2 class="text-xl font-black mb-4">Verification</h2>
-                <input type="text" id="verifyInput" placeholder="LUX-XXXXXX" class="verify-input">
-                <button onclick="runVerification()" id="btnVerify" class="btn-primary">VERIFY TICKET</button>
-                <div id="verifyResult" class="hidden result-box"></div>
-            </div>
         </div>
     </main>
 
-    <!-- Link to Custom JS -->
     <script src="TicketApp.js"></script>
 </body>
 </html>
