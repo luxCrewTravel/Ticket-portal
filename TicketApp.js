@@ -1,7 +1,7 @@
 // 1. SETTINGS
 // Your specific Google Apps Script URL
 const API_URL = "https://script.google.com/macros/s/AKfycbxQymGskabb69adpMXzfkCscMYElyUEXpcdFwWhjnfQBthofm0fytZibwIirpw49mSN/exec"; 
-const UPI_ID = "godwellmahoso01@okaxis";
+const UPI_ID = "godwellmahoso01@oksbi";
 const PRICE = "1000";
 
 let currentData = {};
