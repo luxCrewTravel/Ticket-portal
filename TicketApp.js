@@ -1,5 +1,5 @@
 // --- CONFIGURATION ---
-const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxQymGskabb69adpMXzfkCscMYElyUEXpcdFwWhjnfQBthofm0fytZibwIirpw49mSN/exec"; 
+const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzw4eTIw_zWpgQjfpVJ0WoweGrnQmjMltXPiy-tqtkT1Higswub2jk5YaqF7CBlIej5/exec"; 
 const WHATSAPP_NUMBER = "7527099058"; // WhatsApp number without the +
 
 let currentData = {
