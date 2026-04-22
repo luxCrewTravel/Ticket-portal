@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxcrew Travels | Summer Bash Ticket Portal</title>
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .pool-gradient { background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); }
+        .ticket-visual { background: white; border-radius: 20px; position: relative; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .ticket-visual::before, .ticket-visual::after { content: ''; position: absolute; top: 70%; width: 20px; height: 20px; background: #f3f4f6; border-radius: 50%; z-index: 10; }
+        .ticket-visual::before { left: -10px; }
+        .ticket-visual::after { right: -10px; }
+        .dashed-line { position: absolute; top: 72%; left: 5%; right: 5%; border-top: 2px dashed #e5e7eb; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-md mx-auto flex justify-around p-4">
+            <button onclick="showSection('buy')" id="nav-buy" class="text-blue-600 font-bold border-b-2 border-blue-600 pb-1">Get Tickets</button>
+            <button onclick="showSection('verify')" id="nav-verify" class="text-gray-500 font-bold hover:text-blue-600 transition">Verify Ticket</button>
+        </div>
+    </nav>
+
+    <main class="max-w-md mx-auto p-4 pb-20">
+
+        <!-- SECTION: BUY TICKET -->
+        <div id="section-buy">
+            <div class="bg-white rounded-3xl shadow-lg overflow-hidden mb-6 border border-gray-100">
+                <div class="relative h-56 bg-blue-200">
+                    <img src="./flyerr.png" onerror="this.src='https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=600'" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+                        <p class="text-xs font-bold uppercase tracking-widest text-blue-300">Luxcrew Travels Presents</p>
+                        <h1 class="text-2xl font-black italic">SUMMER BASH</h1>
+                        <p class="text-sm opacity-90">Pool Side Refresh & Fun</p>
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="space-y-1">
+                            <p class="text-sm font-bold text-gray-800">📅 Saturday, 25 April</p>
+                            <p class="text-sm text-gray-600">⏰ 12:00 PM - 07:00 PM</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="bg-yellow-400 text-black text-xs font-black px-2 py-1 rounded-lg">1K INR</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 shadow-lg">
+                <h2 class="text-xl font-black mb-4 text-gray-800">Book Your Spot</h2>
+                <form id="bookingForm" class="space-y-4">
+                    <input type="text" id="custName" required placeholder="Full Name" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="tel" id="custPhone" required pattern="[0-9]{10}" placeholder="Phone (10 digits)" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="email" id="custEmail" required placeholder="Email Address" class="w-full p-3 bg-gray-50 border-none rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="button" onclick="handlePayment()" class="w-full pool-gradient text-white font-black py-4 rounded-2xl shadow-lg transform active:scale-95">
+                        PAY ₹1000 & GENERATE
+                    </button>
+                </form>
+
+                <div id="payConfirmBox" class="hidden mt-4 p-4 border-2 border-dashed border-blue-200 bg-blue-50 rounded-2xl text-center">
+                    <p class="text-blue-800 text-sm font-bold mb-3">Complete payment in your UPI app</p>
+                    <button onclick="processFinalTicket()" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold">
+                        I HAVE PAID - VIEW TICKET
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: DISPLAY TICKET -->
+        <div id="section-ticket" class="hidden">
+            <div id="ticket-capture" class="ticket-visual overflow-hidden">
+                <div class="pool-gradient p-6 text-white">
+                    <h2 class="text-2xl font-black italic">SUMMER BASH</h2>
+                    <p class="text-[10px] font-bold opacity-80 uppercase">Luxcrew Travels Event Pass</p>
+                </div>
+                <div class="p-6 pb-20 space-y-6">
+                    <div class="grid grid-cols-2">
+                        <div><p class="text-[10px] text-gray-400 font-bold">ATTENDEE</p><p id="dispName" class="font-bold"></p></div>
+                        <div class="text-right"><p class="text-[10px] text-gray-400 font-bold">ID</p><p id="dispId" class="font-bold text-blue-600 font-mono"></p></div>
+                    </div>
+                    <div class="dashed-line"></div>
+                    <div class="pt-8 flex flex-col items-center">
+                        <div id="qrcode"></div>
+                        <p class="mt-2 text-[10px] text-gray-400 font-bold uppercase">Scan at Entrance</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="downloadTicket()" class="w-full mt-4 bg-gray-900 text-white py-4 rounded-2xl font-bold">Download PDF</button>
+        </div>
+
+        <!-- SECTION: VERIFY -->
+        <div id="section-verify" class="hidden">
+            <div class="bg-white rounded-3xl p-6 shadow-lg">
+                <h2 class="text-xl font-black mb-4">Verification</h2>
+                <input type="text" id="verifyInput" placeholder="LUX-XXXXXX" class="w-full p-4 bg-gray-50 rounded-xl font-mono text-center text-xl mb-4 outline-none border-2 border-transparent focus:border-blue-500">
+                <button onclick="runVerification()" id="btnVerify" class="w-full pool-gradient text-white py-4 rounded-2xl font-black">CHECK VALIDITY</button>
+                <div id="verifyResult" class="mt-6 hidden p-6 rounded-2xl text-center font-bold"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbxQymGskabb69adpMXzfkCscMYElyUEXpcdFwWhjnfQBthofm0fytZibwIirpw49mSN/exec"; 
+        const UPI_ID = "godwellmahoso01@okaxis";
+        const PRICE = "1000";
+        let currentData = {};
+
+        function showSection(name) {
+            ['buy', 'ticket', 'verify'].forEach(s => document.getElementById('section-' + s).classList.add('hidden'));
+            document.getElementById('section-' + name).classList.remove('hidden');
+        }
+
+        function handlePayment() {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const email = document.getElementById('custEmail').value;
+            if(!name || phone.length !== 10) return alert("Fill details correctly");
+            currentData = { name, phone, email };
+            window.location.href = `upi://pay?pa=${UPI_ID}&pn=Luxcrew&am=${PRICE}&cu=INR`;
+            document.getElementById('payConfirmBox').classList.remove('hidden');
+        }
+
+        async function processFinalTicket() {
+            const ticketId = 'LUX-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+            currentData.ticketId = ticketId;
+            document.getElementById('dispName').innerText = currentData.name;
+            document.getElementById('dispId').innerText = ticketId;
+            
+            try {
+                fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(currentData) });
+                document.getElementById("qrcode").innerHTML = "";
+                new QRCode(document.getElementById("qrcode"), { text: ticketId, width: 140, height: 140 });
+                showSection('ticket');
+            } catch (e) { alert("Error saving"); }
+        }
+
+        function downloadTicket() {
+            const element = document.getElementById('ticket-capture');
+            html2pdf().from(element).save(`Ticket_${currentData.ticketId}.pdf`);
+        }
+
+        async function runVerification() {
+            const id = document.getElementById('verifyInput').value.trim().toUpperCase();
+            const resDiv = document.getElementById('verifyResult');
+            try {
+                const resp = await fetch(`${API_URL}?id=${id}`);
+                const data = await resp.json();
+                resDiv.classList.remove('hidden', 'bg-green-100', 'bg-red-100');
+                if (data.status === 'found') {
+                    resDiv.classList.add('bg-green-100', 'text-green-800');
+                    resDiv.innerHTML = `✅ VALID: ${data.name}`;
+                } else {
+                    resDiv.classList.add('bg-red-100', 'text-red-800');
+                    resDiv.innerHTML = `❌ INVALID ID`;
+                }
+                resDiv.classList.remove('hidden');
+            } catch (e) { alert("Check API URL"); }
+        }
+    </script>
+</body>
+</html>
