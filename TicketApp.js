@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
 const GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxQymGskabb69adpMXzfkCscMYElyUEXpcdFwWhjnfQBthofm0fytZibwIirpw49mSN/exec"; 
-const WHATSAPP_NUMBER = "7347653157"; // WhatsApp number without the +
+const WHATSAPP_NUMBER = "7527099058"; // WhatsApp number without the +
 
 let currentData = {
     name: "",
